@@ -1,6 +1,6 @@
 #   ____________________________________________________________________________
 #   Server                                                                  ####
-
+library(raster)
 library(shiny)
 library(rgdal)
 library(leaflet)
@@ -10,7 +10,7 @@ library(dplyr)
 library(tidyr)
 library(magrittr)
 library(lubridate)
-library(ggmap)
+#library(ggmap)
 library(xts)
 library(shinyjs)
 library(jsonlite)
@@ -27,7 +27,7 @@ library(RColorBrewer)
 library(DT)
 library(shinyBS)
 
-source("keyring.R")
+#source("keyring.R")
 
 
 ### . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ..
@@ -90,33 +90,22 @@ shinyServer(function(input, output) {
     
     # ---------------------------
     # create color scheme for map
-    bins <- c(seq(0,1,.2))
-    pal <- colorBin("YlOrRd", domain = rev(GeoDF$bin_20), bins = rev(bins))
-
+    bins <- c(min(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 2*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 3*sd(values(DEPARTAMENTOS_tif)),min(values(DEPARTAMENTOS_tif)) + 
+                4*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 5*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 6*sd(values(DEPARTAMENTOS_tif)),min(values(DEPARTAMENTOS_tif)) + 7*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 
+                8*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 9*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 10*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 11*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 
+                12*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 13*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 14*sd(values(DEPARTAMENTOS_tif)), max(values(DEPARTAMENTOS_tif)))
+    pal <- colorBin("YlOrRd", domain = values(DEPARTAMENTOS_tif), bins = rev(bins))
     output$map <- renderLeaflet({
-        
+      sd(values(DEPARTAMENTOS_tif))
         leaflet(GeoDFr()) %>%
             addProviderTiles(providers$CartoDB.Positron) %>%
-            setView(-73.885343, 40.720403, 11) %>%
-            addPolygons(layerId = geoIDs(),
-                        weight = 1, smoothFactor = 0.5,
-                        opacity = 1.0, fillOpacity = 0.8,
-                        color = NA,
-                        fillColor = ~pal(bin_20),
-                        highlightOptions = highlightOptions(
-                            color = "white", weight = 2,
-                            bringToFront = TRUE),
-                        label = CTlabels(),
-                        labelOptions = labelOptions(
-                            style = list("font-weight" = "normal",
-                                         padding = "3px 8px"),
-                            textsize = "15px",
-                            direction = "auto")) %>% 
-            leaflet::addLegend(pal = pal, 
-                      values = ~bin_20, 
-                      opacity = 0.7, 
-                      title = NULL,
-                      position = "bottomright")
+            setView(-78, 0, 11) %>%
+            addRasterImage(DEPARTAMENTOS_tif, colors=pal, opacity = 0.6)  %>% 
+      leaflet::addLegend(pal = pal, 
+                         values = ~values(DEPARTAMENTOS_tif), 
+                         opacity = 0.7, 
+                         title = NULL,
+                         position = "bottomright")
     })
     
     # --------------------------------------------------------
