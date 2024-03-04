@@ -94,18 +94,20 @@ shinyServer(function(input, output) {
                 8*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 9*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 10*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 11*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 
                 12*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 13*sd(values(DEPARTAMENTOS_tif)), min(values(DEPARTAMENTOS_tif)) + 14*sd(values(DEPARTAMENTOS_tif)), max(values(DEPARTAMENTOS_tif)))
     pal <- colorBin("YlOrRd", domain = values(DEPARTAMENTOS_tif), bins = rev(bins))
-    output$map <- renderLeaflet({
-      sd(values(DEPARTAMENTOS_tif))
-        leaflet(GeoDFr()) %>%
-            addProviderTiles(providers$CartoDB.Positron) %>%
-            setView(-78, 0, 11) %>%
-            addRasterImage(DEPARTAMENTOS_tif, colors=pal, opacity = 0.6)  %>% 
-      leaflet::addLegend(pal = pal, 
-                         values = ~values(DEPARTAMENTOS_tif), 
-                         opacity = 0.7, 
-                         title = NULL,
-                         position = "bottomright")
+    output$map <- renderLeaflet({ 
+      leaflet(GeoDFr()) %>%
+        addProviderTiles(providers$CartoDB.Positron) %>%
+        setView(-78, 0, 6) %>%
+        addRasterImage(DEPARTAMENTOS_tif, colors=pal, opacity = 0.6) %>%
+        addRasterImageOptions(noWrap = TRUE) %>%
+        addPopup(lng = ~lng, lat = ~lat, popup = ~as.character(values(DEPARTAMENTOS_tif))) %>%
+        leaflet::addLegend(pal = pal,
+                           values = ~values(DEPARTAMENTOS_tif),
+                           opacity = 0.7,
+                           title = NULL,
+                           position = "bottomright")
     })
+    
     
     # --------------------------------------------------------
     # observe click events in map and get neighborhood details

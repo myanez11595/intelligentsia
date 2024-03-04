@@ -8,10 +8,8 @@ neighborhoodDescription <- function() {
             p("You are new to New York City or real estate investment? Use Intelligentsia's neighborhood browser to identify pockets of opportunity in the city."),
             p("Use the map to browse New York City's gentrifying census tracts. Click on any one of them to get more detailed information. Use the slider to show only the top k tracts."),
             fluidRow(
-                column(7,
-                       sliderInput("topK","Show top k census tracts",
-                                   10, max(pred$rank), 50, 10, width = "100%"),
-                       leafletOutput("map", height = 600)
+                column(12,
+                       withLoader(leafletOutput("map", height = 600, width = 1100))
                        ),
                 hidden(column(5, class = "hood-info", id = "reactiveOutput1",
                        h1(textOutput("hood"), class = "heading"),
