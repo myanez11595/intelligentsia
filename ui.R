@@ -9,8 +9,7 @@ library(shinyBS)
 
 source("appParts.R")
 source("readData.R")
-
-
+#setwd("C:/Users/HP Laptop/Downloads/intelligentsia-master/intelligentsia-master")
 ### . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . ..
 ### Colors                                                                  ####
 
@@ -21,7 +20,7 @@ source("readData.R")
 #FF5850 red
 #436983 hipster blue
 
-shinyUI(navbarPage(title = "Intelligentsia",
+shinyUI(navbarPage(title = "InmoVision",
                    theme = "style/style.css",
                    footer = includeHTML("footer.html"),
                    fluid = TRUE, 

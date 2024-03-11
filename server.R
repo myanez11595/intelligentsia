@@ -99,8 +99,6 @@ shinyServer(function(input, output) {
         addProviderTiles(providers$CartoDB.Positron) %>%
         setView(-78, 0, 6) %>%
         addRasterImage(DEPARTAMENTOS_tif, colors=pal, opacity = 0.6) %>%
-        addRasterImageOptions(noWrap = TRUE) %>%
-        addPopup(lng = ~lng, lat = ~lat, popup = ~as.character(values(DEPARTAMENTOS_tif))) %>%
         leaflet::addLegend(pal = pal,
                            values = ~values(DEPARTAMENTOS_tif),
                            opacity = 0.7,

@@ -1,13 +1,16 @@
 library(rgdal)
+library(sf)
 library(sp)
 library(dplyr)
 library(magrittr)
-
+library(shinycustomloader)
+library(terra)
 #   ____________________________________________________________________________
 #   Shapes                                                                  ####
 
 suppressMessages({
-    CTshapes <- readOGR("data/cb_2013_36_ct_500k/cb_2013_36_tract_500k.shp", 
+    DEPARTAMENTOS_tif <- rast('DEPARTAMENTOS.tif')
+    CTshapes <- st_read("data/cb_2013_36_ct_500k/cb_2013_36_tract_500k.shp", 
                         layer = "cb_2013_36_tract_500k",
                         stringsAsFactors = FALSE)
     
